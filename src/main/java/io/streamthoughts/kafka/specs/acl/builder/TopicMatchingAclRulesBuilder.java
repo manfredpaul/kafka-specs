@@ -78,6 +78,11 @@ public class TopicMatchingAclRulesBuilder extends AbstractAclRulesBuilder implem
         return future.join();
     }
 
+    @Override
+    public boolean canBuildAclUserPolicy() {
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -109,6 +114,7 @@ public class TopicMatchingAclRulesBuilder extends AbstractAclRulesBuilder implem
                 .filter(p -> p.getType() == ResourceType.TOPIC)
                 .filter(AclResourcePermission::isPatternOfTypeMatchRegex)
                 .collect(Collectors.toList());
+
         return createAllAclsFor(user.principal(),
                 filterPermissionMatchingTopic(permissions, topic),
                 topic.name(),

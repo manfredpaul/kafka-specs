@@ -25,6 +25,7 @@ import io.streamthoughts.kafka.specs.YAMLClusterSpecWriter;
 import io.streamthoughts.kafka.specs.acl.AclRule;
 import io.streamthoughts.kafka.specs.acl.AclRulesBuilder;
 import io.streamthoughts.kafka.specs.acl.AclUserPolicy;
+import io.streamthoughts.kafka.specs.acl.builder.LiteralAclRulesBuilder;
 import io.streamthoughts.kafka.specs.acl.builder.TopicMatchingAclRulesBuilder;
 import io.streamthoughts.kafka.specs.internal.AdminClientUtils;
 import io.streamthoughts.kafka.specs.operation.DescribeAclsOperation;
@@ -59,7 +60,10 @@ public class ExportClusterSpecCommand implements ClusterCommand<Void> {
      */
     public ExportClusterSpecCommand(final AdminClient client) {
         this.client = client;
-        this.aclRulesBuilder =  new TopicMatchingAclRulesBuilder(client);
+        this.aclRulesBuilder = AclRulesBuilder.combines(
+            new LiteralAclRulesBuilder(),
+            new TopicMatchingAclRulesBuilder(client));
+        //this.aclRulesBuilder =  new TopicMatchingAclRulesBuilder(client);
     }
 
     /**
